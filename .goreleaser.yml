@@ -3,7 +3,7 @@ project_name: steam-account-switcher
 before:
   hooks:
     - go mod download
-    - cp accounts-sample.toml accounts.toml
+    - cp settings-sample.toml settings.toml
 
 builds:
   - env:
@@ -28,7 +28,7 @@ archives:
     files:
       - LICENSE
       - README.md
-      - accounts.toml
+      - settings.toml
 
 checksum:
   name_template: 'checksums.txt'
