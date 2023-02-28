@@ -42,7 +42,8 @@ func onReady() {
 
 	systray.AddSeparator()
 
-	accounts, err := getAccounts()
+	settings, accounts, err := getSettings()
+
 	if err != nil {
 		logError(err)
 	}
@@ -78,8 +79,18 @@ func onReady() {
 			}
 
 			activeAccount := accounts[chosen]
-			if err := switchAccount(activeAccount); err != nil {
-				logError(err)
+
+			_ = stopSteam()
+
+			if err = switchAccountRegistry(activeAccount); err != nil {
+				logError(fmt.Errorf("error switching account in registry: %s", err.Error()))
+			}
+			if err = switchAccountLoginUsersVdf(settings, activeAccount); err != nil {
+				logError(fmt.Errorf("error switching account in loginusers.vdf: %s", err.Error()))
+			}
+			err = startSteam()
+			if err != nil {
+				logError(fmt.Errorf("failed to start steam client %+v", err))
 			}
 
 			for _, account := range accounts {
